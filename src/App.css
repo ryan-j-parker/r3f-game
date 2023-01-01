@@ -46,6 +46,14 @@ body,
   cursor: pointer;
 }
 
+.restart:hover {
+  background: #00000040;
+}
+
+.restart:active {
+  background: #bbbaaa60;
+}
+
 .controls {
   position: absolute;
   bottom: 10%;
@@ -71,6 +79,6 @@ body,
 }
 
 .controls .key.active {
-  background: #ffffff99;
+  background: #ffffee99;
 }
 

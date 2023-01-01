@@ -5,19 +5,33 @@ import * as THREE from 'three';
 THREE.ColorManagement.legacyMode = false;
 
 import { CuboidCollider, RigidBody } from '@react-three/rapier';
-import { useGLTF } from '@react-three/drei';
+import { Float, Text, useGLTF } from '@react-three/drei';
 
 const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
-const floor1Material = new THREE.MeshStandardMaterial({ color: '#2b9720' });
-const floor2Material = new THREE.MeshStandardMaterial({ color: '#5ef38c' });
-const obstacleMaterial = new THREE.MeshStandardMaterial({ color: '#ee6055' });
-const wallMaterial = new THREE.MeshStandardMaterial({ color: '#44ccff' });
+const floor1Material = new THREE.MeshStandardMaterial({ color: '#2b9720', metalness: 0, roughness: 0 });
+const floor2Material = new THREE.MeshStandardMaterial({ color: '#5ef38c', metalness: 0, roughness: 0 });
+const obstacleMaterial = new THREE.MeshStandardMaterial({ color: '#ee6055', metalness: 0, roughness: 1 });
+const wallMaterial = new THREE.MeshStandardMaterial({ color: '#44ccff', metalness: 0, roughness: 0 });
 
 export function BlockStart({ position = [0, 0, 0] }) {
   const blockRef = useRef();
 
   return (
     <group position={position}>
+      <Float floatIntensity={0.25} rotationIntensity={0.25}>
+        <Text
+          font="./bebas-neue-v9-latin-regular.woff"
+          scale={0.24}
+          position={[0.5, 0.65, 0]}
+          maxWidth={0.25}
+          lineHeight={0.75}
+          textAlign="right"
+          rotation-y={-0.35}
+        >
+          Marble Ninja Warrior
+          <meshBasicMaterial toneMapped={false} />
+        </Text>
+      </Float>
       <mesh
         ref={blockRef}
         geometry={boxGeometry}
@@ -40,6 +54,13 @@ export function BlockEnd({ position = [0, 0, 0] }) {
 
   return (
     <group position={position}>
+      <Text
+        font="./bebas-neue-v9-latin-regular.woff"
+        scale={0.5}
+        position={[0, 2.25, 0]}
+      >Finish
+        <meshBasicMaterial toneMapped={false} />
+      </Text>
       <mesh
         ref={blockRef}
         geometry={boxGeometry}
@@ -218,7 +239,7 @@ function Bounds({ length = 1 }) {
   );
 }
 
-export function Level({ count = 5, types = [BlockSpinner, BlockLimbo, BlockAxe] }) {
+export function Level({ count = 5, types = [BlockSpinner, BlockLimbo, BlockAxe], seed = 0 }) {
   const blocks = useMemo(() => {
     const blocks = [];
     for (let i = 0; i < count; i++) {
@@ -226,9 +247,7 @@ export function Level({ count = 5, types = [BlockSpinner, BlockLimbo, BlockAxe] 
       blocks.push(type);
     }
     return blocks;
-  }, [count, types]);
-
-
+  }, [count, types, seed]);
 
   return (
     <>

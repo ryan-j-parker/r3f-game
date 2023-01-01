@@ -4,6 +4,7 @@ import { RigidBody, useRapier } from '@react-three/rapier';
 import { useKeyboardControls } from '@react-three/drei';
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
+import useGame from './hooks/useGame.js';
 
 export default function Player() {
   const [subscribeKeys, getKeys] = useKeyboardControls();
@@ -16,6 +17,11 @@ export default function Player() {
 
   const [smoothedCameraPosition] = useState(() => new THREE.Vector3(20, 20, 20));
   const [smoothedCameraTarget] = useState(() => new THREE.Vector3());
+
+  const start = useGame((state) => state.start);
+  const end = useGame((state) => state.end);
+  const restart = useGame((state) => state.restart);
+  const blocksCount = useGame((state) => state.blocksCount);
 
   console.log(world.raw);
   const jump = () => {
@@ -35,7 +41,22 @@ export default function Player() {
     // body.current.applyImpulse({ x: 0, y: 0.5, z: 0 });
   };
 
+  const reset = () => {
+    body.current.setTranslation({ x: 0, y: 1, z: 0 });
+    body.current.setLinvel({ x: 0, y: 0, z: 0 });
+    body.current.setAngvel({ x: 0, y: 0, z: 0 });
+  };
+
   useEffect(() => {
+    const unsubscribeReset = useGame.subscribe(
+      (state) => state.phase,
+      (value) => {
+        if (value === 'ready') {
+          reset();
+        }
+      }
+    );
+
     const unsubscribeJump = subscribeKeys(
       (state) => state.jump,
       (value) => {
@@ -44,13 +65,20 @@ export default function Player() {
         }
       }
     );
+
+    const unsubscribeAny = subscribeKeys(() => {
+      start();
+    });
+
     return () => {
+      unsubscribeReset();
       unsubscribeJump();
+      unsubscribeAny();
     };
   }, []);
 
   useFrame((state, delta) => {
-    const { forward, backward, left, right, jump } = getKeys();
+    const { forward, backward, left, right } = getKeys();
     const impulse = { x: 0, y: 0, z: 0 };
     const torque = { x: 0, y: 0, z: 0 };
 
@@ -67,11 +95,11 @@ export default function Player() {
     }
     if (left) {
       impulse.x -= impulseStrength;
-      torque.x += torqueStrength;
+      torque.z += torqueStrength;
     }
     if (right) {
       impulse.x += impulseStrength;
-      torque.x -= torqueStrength;
+      torque.z -= torqueStrength;
     }
 
     body.current.applyImpulse(impulse);
@@ -87,11 +115,19 @@ export default function Player() {
     cameraTarget.copy(bodyPosition);
     cameraTarget.y += 0.25;
 
-    smoothedCameraPosition.lerp(cameraPosition, 0.1);
-    smoothedCameraTarget.lerp(cameraTarget, 0.1);
+    smoothedCameraPosition.lerp(cameraPosition, 5 * delta);
+    smoothedCameraTarget.lerp(cameraTarget, 5 * delta);
 
     state.camera.position.copy(smoothedCameraPosition);
     state.camera.lookAt(smoothedCameraTarget);
+
+    if (bodyPosition.z < -(blocksCount * 4 + 2)) {
+      end();
+    }
+
+    if (bodyPosition.y < -4) {
+      restart();
+    }
   });
 
   return (

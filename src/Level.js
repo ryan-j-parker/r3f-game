@@ -29,7 +29,12 @@ const wallMaterial = new THREE.MeshStandardMaterial({
   color: '#a5abaf',
   metalness: 0.9,
   roughness: 0.01,
-  opacity: 0.5,
+});
+
+const boxMaterial = new THREE.MeshStandardMaterial({
+  color: '#2291fc',
+  metalness: Math.random(),
+  roughness: Math.random(),
 });
 
 export function BlockStart({ position = [0, 0, 0] }) {
@@ -46,6 +51,7 @@ export function BlockStart({ position = [0, 0, 0] }) {
           lineHeight={0.75}
           textAlign="right"
           rotation-y={-0.55}
+          color="#fff33a"
         >
           Maddie&apos;s Marble Ninja Warrior
           <meshBasicMaterial toneMapped={false} />
@@ -85,6 +91,17 @@ export function BlockEnd({ position = [0, 0, 0] }) {
     mesh.castShadow = true;
   });
 
+  const finishBoxGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+
+  const props = {
+    // type: 'kinematicPosition',
+    colliders: 'hull',
+    friction: 1,
+    restitution: 0.2,
+    mass: 0.025,
+    gravityScale: 0.3,
+  };
+
   return (
     <group position={position}>
       <Text font="./bebas-neue-v9-latin-regular.woff" scale={0.5} position={[0, 2.25, 0]}>
@@ -99,14 +116,32 @@ export function BlockEnd({ position = [0, 0, 0] }) {
         receiveShadow
         material={floor1Material}
       />
-      <RigidBody
-        type="fixed"
+      {/* <RigidBody
+        // type="fixed"
         colliders="hull"
         position={[0, 0.25, 0]}
         restitution={0.2}
         friction={0}
       >
         <primitive object={hamburger.scene} scale={0.2} />
+      </RigidBody> */}
+      <RigidBody {...props} position={[-0.51, 0.25, 0]} rotation-y={[-0.25]}>
+        <mesh castShadow material={boxMaterial} geometry={finishBoxGeometry} />
+      </RigidBody>
+      <RigidBody {...props} position={[0, 0.25, 0]}>
+        <mesh castShadow material={boxMaterial} geometry={finishBoxGeometry} />
+      </RigidBody>
+      <RigidBody {...props} position={[0.52, 0.25, 0]} rotation-y={[0.29]}>
+        <mesh castShadow material={boxMaterial} geometry={finishBoxGeometry} />
+      </RigidBody>
+      <RigidBody {...props} position={[-0.275, 0.75, 0]} rotation-y={[-0.19]}>
+        <mesh castShadow material={boxMaterial} geometry={finishBoxGeometry} />
+      </RigidBody>
+      <RigidBody {...props} position={[0.251, 0.75, 0]} rotation-y={[0.09]}>
+        <mesh castShadow material={boxMaterial} geometry={finishBoxGeometry} />
+      </RigidBody>
+      <RigidBody {...props} position={[0, 1.25, 0]} rotation-y={[0.1]}>
+        <mesh castShadow material={boxMaterial} geometry={finishBoxGeometry} />
       </RigidBody>
     </group>
   );

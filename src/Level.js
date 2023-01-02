@@ -45,9 +45,23 @@ export function BlockStart({ position = [0, 0, 0] }) {
           maxWidth={0.25}
           lineHeight={0.75}
           textAlign="right"
-          rotation-y={-0.35}
+          rotation-y={-0.55}
         >
-          Marble Ninja Warrior
+          Maddie&apos;s Marble Ninja Warrior
+          <meshBasicMaterial toneMapped={false} />
+        </Text>
+      </Float>
+      <Float floatIntensity={0.75} rotationIntensity={0.5}>
+        <Text
+          font="./bebas-neue-v9-latin-regular.woff"
+          scale={0.1}
+          position={[-0.55, 0.65, 0.4]}
+          maxWidth={0.5}
+          lineHeight={0.75}
+          textAlign="left"
+          rotation-y={0.55}
+        >
+          can you beat 30s?
           <meshBasicMaterial toneMapped={false} />
         </Text>
       </Float>

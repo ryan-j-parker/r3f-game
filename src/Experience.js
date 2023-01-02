@@ -11,7 +11,6 @@ export default function Experience() {
 
   const blocksCount = useGame((state) => state.blocksCount);
   const blocksSeed = useGame((state) => state.blocksSeed);
-  console.log(blocksCount);
 
   return (
     <>

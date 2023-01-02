@@ -9,10 +9,28 @@ import { CuboidCollider, RigidBody } from '@react-three/rapier';
 import { Float, Text, useGLTF } from '@react-three/drei';
 
 const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
-const floor1Material = new THREE.MeshStandardMaterial({ color: '#2b9720', metalness: 0, roughness: 0 });
-const floor2Material = new THREE.MeshStandardMaterial({ color: '#5ef38c', metalness: 0, roughness: 0 });
-const obstacleMaterial = new THREE.MeshStandardMaterial({ color: '#ee6055', metalness: 0, roughness: 1 });
-const wallMaterial = new THREE.MeshStandardMaterial({ color: '#44ccff', metalness: 0, roughness: 0 });
+const floor1Material = new THREE.MeshStandardMaterial({
+  color: '#2b9720',
+  metalness: 0.5,
+  roughness: 0.5,
+});
+const floor2Material = new THREE.MeshStandardMaterial({
+  color: '#5ef38c',
+  metalness: 0.5,
+  roughness: 0.5,
+});
+const obstacleMaterial = new THREE.MeshStandardMaterial({
+  color: '#ee6055',
+  metalness: 0.5,
+  roughness: 1,
+});
+const wallMaterial = new THREE.MeshStandardMaterial({
+  // color: '#44ccff',
+  color: '#a5abaf',
+  metalness: 0.9,
+  roughness: 0.01,
+  opacity: 0.5,
+});
 
 export function BlockStart({ position = [0, 0, 0] }) {
   const blockRef = useRef();
@@ -55,11 +73,8 @@ export function BlockEnd({ position = [0, 0, 0] }) {
 
   return (
     <group position={position}>
-      <Text
-        font="./bebas-neue-v9-latin-regular.woff"
-        scale={0.5}
-        position={[0, 2.25, 0]}
-      >Finish
+      <Text font="./bebas-neue-v9-latin-regular.woff" scale={0.5} position={[0, 2.25, 0]}>
+        Finish
         <meshBasicMaterial toneMapped={false} />
       </Text>
       <mesh
@@ -95,6 +110,13 @@ export function BlockSpinner({ position = [0, 0, 0] }) {
     obstacle.current.setNextKinematicRotation(rotation);
   });
 
+  const [hitSound] = useState(() => new Audio('/hit.mp3'));
+  const hitEnter = () => {
+    hitSound.currentTime = 0;
+    hitSound.volume = Math.random();
+    hitSound.play();
+  };
+
   return (
     <group position={position}>
       <mesh
@@ -110,6 +132,7 @@ export function BlockSpinner({ position = [0, 0, 0] }) {
         position={[0, 0.3, 0]}
         restitution={0.2}
         friction={0}
+        onCollisionEnter={hitEnter}
       >
         <mesh
           castShadow
@@ -124,6 +147,12 @@ export function BlockSpinner({ position = [0, 0, 0] }) {
 }
 
 export function BlockLimbo({ position = [0, 0, 0] }) {
+  const [hitSound] = useState(() => new Audio('/hit.mp3'));
+  const hitEnter = () => {
+    hitSound.currentTime = 0;
+    hitSound.volume = Math.random();
+    hitSound.play();
+  };
   const obstacle = useRef();
 
   const [timeOffset] = useState(() => Math.random() * Math.PI * 2);
@@ -153,6 +182,7 @@ export function BlockLimbo({ position = [0, 0, 0] }) {
         position={[0, 0.3, 0]}
         restitution={0.2}
         friction={0}
+        onCollisionEnter={hitEnter}
       >
         <mesh
           castShadow
@@ -167,6 +197,12 @@ export function BlockLimbo({ position = [0, 0, 0] }) {
 }
 
 export function BlockAxe({ position = [0, 0, 0] }) {
+  const [hitSound] = useState(() => new Audio('/hit.mp3'));
+  const hitEnter = () => {
+    hitSound.currentTime = 0;
+    hitSound.volume = Math.random();
+    hitSound.play();
+  };
   const obstacle = useRef();
 
   const [timeOffset] = useState(() => Math.random() * Math.PI * 2);
@@ -196,6 +232,7 @@ export function BlockAxe({ position = [0, 0, 0] }) {
         position={[0, 0.3, 0]}
         restitution={0.2}
         friction={0}
+        onCollisionEnter={hitEnter}
       >
         <mesh
           castShadow

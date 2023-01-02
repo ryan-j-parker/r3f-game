@@ -82,3 +82,10 @@ body,
   background: #ffffee99;
 }
 
+.audio {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  font-size: 2rem;
+  color: white;
+}

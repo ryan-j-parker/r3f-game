@@ -12,7 +12,6 @@ export default create(
 
       start: () => {
         set((state) => {
-          console.log(state);
           if (state.phase === 'ready') {
             return { phase: 'playing', startTime: Date.now() };
           }

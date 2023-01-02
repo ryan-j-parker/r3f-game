@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unknown-property */
 import { useFrame } from '@react-three/fiber';
 import { RigidBody, useRapier } from '@react-three/rapier';
@@ -23,7 +24,6 @@ export default function Player() {
   const restart = useGame((state) => state.restart);
   const blocksCount = useGame((state) => state.blocksCount);
 
-  console.log(world.raw);
   const jump = () => {
     const origin = body.current.translation();
     origin.y -= 0.31;

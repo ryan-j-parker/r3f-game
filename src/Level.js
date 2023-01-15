@@ -195,6 +195,66 @@ export function BlockSpinner({ position = [0, 0, 0] }) {
   );
 }
 
+export function BlockWheel({ position = [0, 0, 0] }) {
+  const obstacle = useRef();
+
+  const [speed] = useState(() => (Math.random() + 0.3) * (Math.random() < 0.5 ? -1 : 1));
+
+  const [timeOffset] = useState(() => Math.random() * Math.PI * 2);
+
+  useFrame((state) => {
+    const time = state.clock.getElapsedTime();
+    const x = Math.sin(time + timeOffset) * 1.5;
+    obstacle.current.setNextKinematicTranslation({
+      x: position[0] + x,
+      y: position[1] + 0.8,
+      z: position[2],
+    });
+  });
+
+  useFrame((state) => {
+    const time = state.clock.getElapsedTime();
+    const rotation = new THREE.Quaternion();
+    rotation.setFromEuler(new THREE.Euler(0, 0, time * speed));
+    obstacle.current.setNextKinematicRotation(rotation);
+  });
+
+  const [hitSound] = useState(() => new Audio('/hit.mp3'));
+  const hitEnter = () => {
+    hitSound.currentTime = 0;
+    hitSound.volume = Math.random();
+    hitSound.play();
+  };
+
+  return (
+    <group position={position}>
+      <mesh
+        receiveShadow
+        geometry={boxGeometry}
+        material={floor2Material}
+        position={[0, -0.1, 0]}
+        scale={[4, 0.2, 4]}
+      />
+      <RigidBody
+        ref={obstacle}
+        type="kinematicPosition"
+        position={[0, 0.88, 0]}
+        restitution={0.2}
+        friction={0}
+        onCollisionEnter={hitEnter}
+      >
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={boxGeometry}
+          material={obstacleMaterial}
+          scale={[1.05, 0.3, 0.3]}
+        />
+      </RigidBody>
+    </group>
+  );
+}
+
 export function BlockLimbo({ position = [0, 0, 0] }) {
   const [hitSound] = useState(() => new Audio('/hit.mp3'));
   const hitEnter = () => {
@@ -326,7 +386,7 @@ function Bounds({ length = 1 }) {
   );
 }
 
-export function Level({ count = 5, types = [BlockSpinner, BlockLimbo, BlockAxe], seed = 0 }) {
+export function Level({ count = 5, types = [BlockSpinner, BlockLimbo, BlockAxe, BlockWheel], seed = 0 }) {
   const blocks = useMemo(() => {
     const blocks = [];
     for (let i = 0; i < count; i++) {

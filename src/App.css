@@ -31,7 +31,7 @@ body,
   text-align: center;
 }
 
-.restart {
+.start, .restart {
   display: flex;
   justify-content: center;
   position: absolute;
@@ -46,11 +46,11 @@ body,
   cursor: pointer;
 }
 
-.restart:hover {
+.start:hover, .restart:hover {
   background: #00000040;
 }
 
-.restart:active {
+.start:active, .restart:active {
   background: #bbbaaa60;
 }
 
@@ -88,4 +88,15 @@ body,
   right: 20px;
   font-size: 2rem;
   color: white;
+}
+
+@media screen and (min-width: 2048px) {
+  .time {
+    font-size: 8vh;
+  }
+
+  .audio-toggle,
+  .misc-controls {
+    right: 20vw;
+  }
 }

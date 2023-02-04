@@ -1,4 +1,4 @@
-# R3F Marble Ninja Warrior
+# Maddie's Marble Ninja Warrior
 > ### An obstacle-running game built with [React Three Fiber](https://github.com/pmndrs/react-three-fiber), [Rapier](https://github.com/pmndrs/react-three-rapier), and [Drei](https://github.com/pmndrs/drei).
 > ### Use WASD/arrows to move the marble, and space to jump.
 > ### Try to beat 30s to the finish!

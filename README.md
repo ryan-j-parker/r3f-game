@@ -2,6 +2,7 @@
 > ### An obstacle-running game built with [React Three Fiber](https://github.com/pmndrs/react-three-fiber), [Rapier](https://github.com/pmndrs/react-three-rapier), and [Drei](https://github.com/pmndrs/drei).
 > ### Use WASD/arrows to move the marble, and space to jump.
 > ### Try to beat 30s to the finish!
+> ### Built for my sister Christmas 2022 😋
 
 ![image](https://user-images.githubusercontent.com/107072854/210424098-72a25a89-1b33-4fac-b719-c9d5fbabaf3c.png)
 
